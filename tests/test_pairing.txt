@@ -30,7 +30,7 @@ Scenario:
    Riding A is a NDP swing riding
    Riding B is a Liberal riding
 
-   Result: Joe is paired with Sally, Joe votes NDP, Sally votes Liberal
+   Result: Joe and Sally are not paired
 
 >>> pairvote('''
 ... ,,"Joe",,,"Riding A","Liberal","NDP",,,,1,
@@ -39,7 +39,7 @@ Scenario:
 ,,Joe,,,RIDING A,Liberal,NDP,,,,1,
 ,,Sally,,,RIDING B,NDP,Green,,,,2,
 
-3. Multiple pairings found in a party's swing riding, 2 out of 3 pairings
+3. Multiple pairings found in a swing riding, 2 out of 3 pairings
    made because only 2 matches for preferred = willing
 
 >>> pairvote('''
