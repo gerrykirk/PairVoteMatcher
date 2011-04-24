@@ -61,7 +61,7 @@ Scenario:
 ,,Frank,,,RIDING B,Liberal,NDP,,Y,,6,1
 ,,George,,,RIDING B,Liberal,Green,,,,7,
 
-5. UPDATE THIS Pairings found in multiple ridings for multiple parties, 
+4. UPDATE THIS Pairings found in multiple ridings for multiple parties, 
    not all potential paired persons matched
    
 >>> pairvote('''
@@ -91,10 +91,10 @@ Scenario:
 ,,Karl,,,RIDING B,Liberal,NDP,,Y,,11,2
 ,,Lenny,,,RIDING B,NDP,Green,,,,12,
 
-6. Pairing not made between persons in two swing ridings because
+5. Pairing not made between persons in two swing ridings because
    all pairs made between swing and non-swing ridings
 
-7. Pairing not made because person should vote for preferred party
+6. Pairing not made because person should vote for preferred party
    in their own riding
 
-8. Pairing for person made only once, cannot be selected again
+7. Pairing for person made only once, cannot be selected again
