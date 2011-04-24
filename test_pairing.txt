@@ -112,3 +112,18 @@ Scenario:
    in their own riding
 
 7. Pairing for person made only once, cannot be selected again
+
+   Alex and Bob both prefer NDP, willing to vote for Liberal. Both
+   live in Riding A (LIberal swing riding). Frank prefers Liberal, willing to vote NDP,
+   lives in non-swing riding.
+
+   Result: Alex paired with Frank.  No match for Bob (Frank is already matched)
+ 
+>>> pairvote('''
+... ,,"Alex",,,"Riding A","NDP","Liberal",,,,1,
+... ,,"Bob",,,"Riding A","NDP","Liberal",,,,2,
+... ,,"Frank",,,"Riding B","Liberal","NDP",,,,3,
+... ''', 'ridingsA.csv')
+,,Alex,,,RIDING A,NDP,Liberal,,Y,,1,3
+,,Bob,,,RIDING A,NDP,Liberal,,,,2,
+,,Frank,,,RIDING B,Liberal,NDP,,Y,,3,1
