@@ -4,8 +4,8 @@
 import csv
 import sys
 
-def pairvote(csv):
-    engine = PairingEngine("ridings.csv")
+def pairvote(csv, ridings_file="ridings.csv"):
+    engine = PairingEngine(ridings_file)
     engine.pair(csv)
 
 def log(*args):
@@ -13,14 +13,12 @@ def log(*args):
     print >>sys.stderr, ' '.join([repr(a) for a in args])
     
 class PairingEngine:
-    # initialize lists for storing results
-    empty_will_vote = []
-    swing_ridings = {}
-    party_ridings = {}
-
-    parties = ["Green", "Liberal", "NDP"]
-
     def __init__(self, ridings_file="rankedridings.csv"):
+        self.emty_will_vote = []
+        self.swing_ridings = {}
+        self.party_ridings = {}
+        self.parties = ["Green", "Liberal", "NDP"]
+    
         self._init_ranked_ridings(ridings_file)
     
     def _init_ranked_ridings(self, ridings_file):
@@ -37,7 +35,7 @@ class PairingEngine:
             self.party_ridings[row[0]].append(riding)
             if not self.swing_ridings.has_key(riding):
                 self.swing_ridings[riding] = True
-    
+        
     # make sure preferred party is not on will vote list 
     def check_voter(self, voter):
         voter['willing'] = voter['willing'].split(',')
@@ -94,11 +92,12 @@ class PairingEngine:
             for riding in self.party_ridings[party]:
                 if not swing_voters.has_key(riding): continue
                 
-                # Check to see if there are any unmatched voters in the current swing riding
+                # We're looking for an unmatched voter in a swing-riding willing to vote
+                # for the current party.
                 for swing_voter in swing_voters[riding]:
                     if not self.candidate_voter(swing_voter, party):
                         continue
-                    
+                                                
                     # Now see if we can find a match in a non-swing riding
                     for voter in non_swing_voters:
                         if self.candidate_voter(voter, swing_voter['preferred']):
@@ -112,7 +111,8 @@ class PairingEngine:
                             voter['swing']='Y'
                             voter['commit'] = swing_voter['preferred']
                             voter['pair'] = swing_voter['sequential']
-    
+                            break
+                            
         # we are done, spit results
         f = open('pairings.csv', 'wb')
         writer = csv.writer(f)
