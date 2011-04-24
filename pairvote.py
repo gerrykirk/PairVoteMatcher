@@ -26,26 +26,19 @@ class PairingEngine:
         self._init_ranked_ridings()
     
     def _init_ranked_ridings(self):
+        # First, populate the dictionary of party ridings with empty lists
+        for p in self.parties:
+            self.party_ridings[p] = []
+            
         # read all ridings from the csv file
         ranked_ridings_csv = csv.reader(open("rankedridings.csv","rb"))
-        self.ranked_ridings = [row for row in ranked_ridings_csv][1:]
+        #self.ranked_ridings = [row for row in ranked_ridings_csv]   
 
-        # take ridings and order them, one for each party, by priority
-        # also keep a list of ridings for each party for easy access
-
-        for riding in self.ranked_ridings:
-            for column in range(len(self.parties)):
-                if not self.parties[column] in self.party_ridings:
-                    self.party_ridings[self.parties[column]]=[]
-                if riding[column]:
-                    riding_name = riding[column].strip()
-                    riding_name = riding_name.upper()
-                    riding_name = riding_name.replace(' - ', '-')
-                    riding_name = riding_name.replace(' -', '-')
-                    riding_name = riding_name.replace('- ', '-')
-                    riding_name = riding_name.replace('--', '-')
-                    self.ordered_ridings.append((self.parties[column],riding_name))
-                    self.party_ridings[self.parties[column]].append(riding_name)        
+        for row in ranked_ridings_csv:
+            self.party_ridings[row[0]].append(row[1])
+            
+            # I'm not sure yet how ordered_ridings will work in the new version of the algorithm
+            self.ordered_ridings.append(row[1])
         
     def pair(self, csv_data=None):
         # create list of voter dictionaries for clear access to column names

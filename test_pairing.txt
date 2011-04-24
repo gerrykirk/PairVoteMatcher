@@ -3,7 +3,7 @@ Test cases
 
 Test Setup
 
->>> from .pairvote import pairvote
+>>> from pairvote import pairvote
 
 Scenario:
 

@@ -1,0 +1,11 @@
+Test Setup
+
+>>> from pairvote import PairingEngine
+
+Scenario:
+
+1. Loading riding list
+
+>>> p = PairingEngine()
+>>> print p.party_ridings
+{'NDP': [' "Nunavut"', ' "Burnaby-Douglas"'], 'Green': [' "Saanich-Gulf Islands"'], 'Liberal': [' "North Vancouver"', ' "Saint Boniface"', ' "Nunavut"', ' "Ajax-Pickering"', ' "Brampton-Springdale"']}
