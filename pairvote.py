@@ -5,7 +5,7 @@ import csv
 import sys
 
 def pairvote(csv):
-    engine = PairingEngine()
+    engine = PairingEngine("ridings.csv")
     engine.pair(csv)
 
 def log(*args):
@@ -22,16 +22,16 @@ class PairingEngine:
     # rankedridings.csv
     parties = ["Liberal","NDP","Green"]
 
-    def __init__(self):
-        self._init_ranked_ridings()
+    def __init__(self, ridings_file="rankedridings.csv"):
+        self._init_ranked_ridings(ridings_file)
     
-    def _init_ranked_ridings(self):
+    def _init_ranked_ridings(self, ridings_file):
         # First, populate the dictionary of party ridings with empty lists
         for p in self.parties:
             self.party_ridings[p] = []
             
         # read all ridings from the csv file
-        ranked_ridings_csv = csv.reader(open("rankedridings.csv","rb"))
+        ranked_ridings_csv = csv.reader(open(ridings_file,"rb"))
         #self.ranked_ridings = [row for row in ranked_ridings_csv]   
 
         for row in ranked_ridings_csv:

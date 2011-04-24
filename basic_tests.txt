@@ -6,6 +6,6 @@ Scenario:
 
 1. Loading riding list
 
->>> p = PairingEngine()
+>>> p = PairingEngine("ridings.csv")
 >>> print p.party_ridings
 {'NDP': [' "Nunavut"', ' "Burnaby-Douglas"'], 'Green': [' "Saanich-Gulf Islands"'], 'Liberal': [' "North Vancouver"', ' "Saint Boniface"', ' "Nunavut"', ' "Ajax-Pickering"', ' "Brampton-Springdale"']}
