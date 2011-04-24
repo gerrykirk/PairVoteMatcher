@@ -77,7 +77,7 @@ Scenario:
 ... ,,"Juan",,,"Riding B","Liberal","Green",,,,10,
 ... ,,"Karl",,,"Riding B","Liberal","NDP",,,,11,
 ... ,,"Lenny",,,"Riding B","NDP","Green",,,,12,
-... ''')
+... ''', 'ridingsA.csv')
 ,,Alex,,,RIDING A,NDP,Liberal,,Y,,1,6
 ,,Bob,,,RIDING A,NDP,Liberal,,Y,,2,11
 ,,Chris,,,RIDING A,Liberal,Green,,Y,,3,9

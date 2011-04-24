@@ -100,7 +100,11 @@ class PairingEngine:
                                                 
                     # Now see if we can find a match in a non-swing riding
                     for voter in non_swing_voters:
-                        if self.candidate_voter(voter, swing_voter['preferred']):
+                        # A valid match is a non-paired voter in a non-swing riding
+                        # who is willing to vote for the swing voter's prefered party,
+                        # and where the swing_voter is willing to vote for the non-swing's
+                        # preferred party.
+                        if self.candidate_voter(voter, swing_voter['preferred']) and self.candidate_voter(swing_voter, voter['preferred']):
                             # match!
                             pairs.append((swing_voter, voter))
                             swing_voter['paired'] = 'Y'
