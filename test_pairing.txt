@@ -9,35 +9,35 @@ Scenario:
 
 1. One voter in swing riding is matched to another in a non-swing riding
 
-   Voter Joe in Riding A prefers Liberal, will vote for NDP
-   Voter Sally in Riding B prefers NDP, will vote for Liberal
-   Riding A is a NDP swing riding
-   Riding B is not a swing riding
+   Voter Joe in Burnaby-Douglas prefers Liberal, will vote for NDP
+   Voter Sally in Oxford prefers NDP, will vote for Liberal
+   Burnaby-Douglas is a NDP swing riding
+   Oxford is not a swing riding
 
    Result: Joe is paired with Sally, Joe votes NDP, Sally votes Liberal
 
 >>> pairvote('''
-... ,,"Joe",,,"Riding A","Liberal","NDP",,,,1,
-... ,,"Sally",,,"Riding B","NDP","Liberal",,,,2,
+... ,,"Joe",,,"Burnaby-Douglas","Liberal","NDP",,,,1,
+... ,,"Sally",,,"Oxford","NDP","Liberal",,,,2,
 ... ''')
-,,Joe,,,RIDING A,Liberal,NDP,,Y,,1,2
-,,Sally,,,RIDING B,NDP,Liberal,,Y,,2,1
+,,Joe,,,BURNABY-DOUGLAS,Liberal,NDP,,Y,,1,2
+,,Sally,,,OXFORD,NDP,Liberal,,Y,,2,1
 
 2. No match available
 
-   Voter Joe in Riding A prefers Liberal, will vote for NDP
-   Voter Sally in Riding B prefers NDP, will vote for Green
-   Riding A is a NDP swing riding
-   Riding B is a non-swing riding
+   Voter Joe in Burnaby-Douglas prefers Liberal, will vote for NDP
+   Voter Sally in Oxford prefers NDP, will vote for Green
+   Burnaby-Douglas is a NDP swing riding
+   Oxford is a non-swing riding
 
    Result: Joe and Sally are not paired
 
 >>> pairvote('''
-... ,,"Joe",,,"Riding A","Liberal","NDP",,,,1,
-... ,,"Sally",,,"Riding B","NDP","Green",,,,2,
+... ,,"Joe",,,"Burnaby-Douglas","Liberal","NDP",,,,1,
+... ,,"Sally",,,"Oxford","NDP","Green",,,,2,
 ... ''')
-,,Joe,,,RIDING A,Liberal,NDP,,,,1,
-,,Sally,,,RIDING B,NDP,Green,,,,2,
+,,Joe,,,BURNABY-DOUGLAS,Liberal,NDP,,,,1,
+,,Sally,,,OXFORD,NDP,Green,,,,2,
 
 3. One pair found for a swing riding, 1 out of 3 pairings
    made because we are only finding matches for NDP

@@ -8,4 +8,5 @@ Scenario:
 
 >>> p = PairingEngine("ridings.csv")
 >>> print p.party_ridings
-{'NDP': [' "Nunavut"', ' "Burnaby-Douglas"'], 'Green': [' "Saanich-Gulf Islands"'], 'Liberal': [' "North Vancouver"', ' "Saint Boniface"', ' "Nunavut"', ' "Ajax-Pickering"', ' "Brampton-Springdale"']}
+{'Liberal': [' "NORTH VANCOUVER"', ' "SAINT BONIFACE"', ' "NUNAVUT"', ' "AJAX-PICKERING"', ' "BRAMPTON-SPRINGDALE"'], 'Green': [' "SAANICH-GULF ISLANDS"'], 'NDP': [' "NUNAVUT"', ' "BURNABY-DOUGLAS"']}
+
