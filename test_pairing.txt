@@ -94,6 +94,20 @@ Scenario:
 5. Pairing not made between persons in two swing ridings because
    all pairs made between swing and non-swing ridings
 
+   Voter Joe in Riding A prefers Liberal, will vote for NDP
+   Voter Sally in Riding B prefers NDP, will vote for Liberal
+   However, Riding A is a Liberal swing riding and Riding B is an NDP swing riding
+   (see ridingsAB.csv) so neither is matched.
+
+   Result: no pairing.
+
+>>> pairvote('''
+... ,,"Joe",,,"Riding A","Liberal","Green",,,,1,
+... ,,"Sally",,,"Riding B","Green","Liberal",,,,2,
+... ''', 'ridingsAB.csv')
+,,Sally,,,RIDING B,Green,Liberal,,,,2,
+,,Joe,,,RIDING A,Liberal,Green,,,,1,
+
 6. Pairing not made because person should vote for preferred party
    in their own riding
 
