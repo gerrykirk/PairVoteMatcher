@@ -14,10 +14,10 @@ def log(*args):
     
 class PairingEngine:
     def __init__(self, ridings_file="rankedridings.csv"):
-        self.emty_will_vote = []
+        self.empty_will_vote = []
         self.swing_ridings = {}
         self.party_ridings = {}
-        self.parties = ["Green", "Liberal", "NDP"]
+        self.parties = ["GREEN", "LIBERAL", "NDP"]
     
         self._init_ranked_ridings(ridings_file)
     
@@ -47,15 +47,26 @@ class PairingEngine:
                        
     def candidate_voter(self, voter, party):
         return party in voter['willing'] and voter['paired'] == '' and voter['problem'] != 'Y'
+    
+    def parse_test_row(self, row, count):
+        log(row)
+        
+        voter = { 'riding': row[5].upper(), 'preferred': row[6], 'willing': row[7], 'paired': row[9],
+                      'commit':'','name':row[2],'email':row[3],'form':row[0],'date':row[1],
+                      'sequential':row[11], 'pair':row[12],'telephone':row[8],'postal':row[4],'problem':row[10]}
+        
+        return voter
+    
+    def parse_spreadsheet_row(self, row, count):
+        log(row)
+        
+        voter = { 'riding': row[9].upper(), 'preferred': row[6], 'willing': row[10], 'paired': '',
+                      'commit':'','name':row[1] + ' ' + row[2],'email':row[0],'form':'','date':'',
+                      'sequential':count, 'pair':'','telephone':'','postal':5,'problem':''}
+        
+        return voter
         
     def pair(self, csv_data=None):
-        # create list of voter dictionaries for clear access to column names
-        if csv_data:
-            voters_csv = csv.reader(csv_data.split("\n"))
-            voters_csv.next()
-        else:
-            voters_csv = csv.reader(open("pairvoterlist.csv","rb"))
-        
         swing_voters = {}
         non_swing_voters = []
         pairs = []
@@ -63,20 +74,28 @@ class PairingEngine:
         # sequential = 0
         # sequentials = {}
 
+        # create list of voter dictionaries for clear access to column names
+        if csv_data:
+            voters_csv = csv.reader(csv_data.split("\n"))
+            voters_csv.next()
+            parse_f = self.parse_test_row
+        else:
+            voters_csv = csv.reader(open("pairvoterlist.csv","rb"))
+            voters_csv.next()
+            parse_f = self.parse_spreadsheet_row
+            
+        count = 0
         for row in voters_csv:
             if not row:
                 continue
             
-            riding = row[5].upper()
-            voter = { 'riding': riding, 'preferred': row[6], 'willing': row[7], 'paired': row[9],
-                          'commit':'','name':row[2],'email':row[3],'form':row[0],'date':row[1],
-                          'sequential':row[11],    'pair':row[12],'telephone':row[8],'postal':row[4],'problem':row[10]}
-            log(row)
+            count += 1
+            voter = parse_f(row, count)
 
-            if self.swing_ridings.has_key(riding):
-                if not swing_voters.has_key(riding):
-                    swing_voters[riding] = []
-                swing_voters[riding].append(voter)
+            if self.swing_ridings.has_key(voter['riding']):
+                if not swing_voters.has_key(voter['riding']):
+                    swing_voters[voter['riding']] = []
+                swing_voters[voter['riding']].append(voter)
             else:
                 # Possibly we could divide them up by who they're willing to vote for?
                 non_swing_voters.append(voter)
@@ -120,10 +139,10 @@ class PairingEngine:
         # we are done, spit results
         f = open('pairings.csv', 'wb')
         writer = csv.writer(f)
-        #print pairs
+
         for pair in pairs:
             def extractpair(pair):
-                return [pair['name'], pair['email'], pair['riding'], pair['preferred'], pair['swing']]
+                return [pair['name'], pair['email'], pair['riding'], pair['commit'], pair['swing']]
             writer.writerow(extractpair(pair[0]) + extractpair(pair[1]))
         f.close()
         

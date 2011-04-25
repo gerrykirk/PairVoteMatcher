@@ -17,11 +17,11 @@ Scenario:
    Result: Joe is paired with Sally, Joe votes NDP, Sally votes Liberal
 
 >>> pairvote('''
-... ,,"Joe",,,"Burnaby-Douglas","Liberal","NDP",,,,1,
-... ,,"Sally",,,"Oxford","NDP","Liberal",,,,2,
+... ,,"Joe",,,"Burnaby-Douglas","LIBERAL","NDP",,,,1,
+... ,,"Sally",,,"Oxford","NDP","LIBERAL",,,,2,
 ... ''')
-,,Joe,,,BURNABY-DOUGLAS,Liberal,NDP,,Y,,1,2
-,,Sally,,,OXFORD,NDP,Liberal,,Y,,2,1
+,,Joe,,,BURNABY-DOUGLAS,LIBERAL,NDP,,Y,,1,2
+,,Sally,,,OXFORD,NDP,LIBERAL,,Y,,2,1
 
 2. No match available
 
@@ -33,11 +33,11 @@ Scenario:
    Result: Joe and Sally are not paired
 
 >>> pairvote('''
-... ,,"Joe",,,"Burnaby-Douglas","Liberal","NDP",,,,1,
-... ,,"Sally",,,"Oxford","NDP","Green",,,,2,
+... ,,"Joe",,,"Burnaby-Douglas","LIBERAL","NDP",,,,1,
+... ,,"Sally",,,"Oxford","NDP","GREEN",,,,2,
 ... ''')
-,,Joe,,,BURNABY-DOUGLAS,Liberal,NDP,,,,1,
-,,Sally,,,OXFORD,NDP,Green,,,,2,
+,,Joe,,,BURNABY-DOUGLAS,LIBERAL,NDP,,,,1,
+,,Sally,,,OXFORD,NDP,GREEN,,,,2,
 
 3. One pair found for a swing riding, 1 out of 3 pairings
    made because we are only finding matches for NDP
@@ -45,51 +45,51 @@ Scenario:
    Riding B is a non-swing riding
 
 >>> pairvote('''
-... ,,"Alex",,,"Riding A","NDP","Liberal",,,,1,
-... ,,"Bob",,,"Riding A","NDP","Liberal",,,,2,
-... ,,"Chris",,,"Riding A","Liberal","Green",,,,3,
-... ,,"Derek",,,"Riding A","Green","Liberal",,,,4,
-... ,,"Edward",,,"Riding B","Liberal","Green",,,,5,
-... ,,"Frank",,,"Riding B","Liberal","NDP",,,,6,
-... ,,"George",,,"Riding B","Liberal","Green",,,,7,
+... ,,"Alex",,,"Riding A","NDP","LIBERAL",,,,1,
+... ,,"Bob",,,"Riding A","NDP","LIBERAL",,,,2,
+... ,,"Chris",,,"Riding A","LIBERAL","GREEN",,,,3,
+... ,,"Derek",,,"Riding A","GREEN","LIBERAL",,,,4,
+... ,,"Edward",,,"Riding B","LIBERAL","GREEN",,,,5,
+... ,,"Frank",,,"Riding B","LIBERAL","NDP",,,,6,
+... ,,"George",,,"Riding B","LIBERAL","GREEN",,,,7,
 ... ''', 'ridingsA.csv')
-,,Alex,,,RIDING A,NDP,Liberal,,Y,,1,6
-,,Bob,,,RIDING A,NDP,Liberal,,,,2,
-,,Chris,,,RIDING A,Liberal,Green,,,,3,
-,,Derek,,,RIDING A,Green,Liberal,,Y,,4,5
-,,Edward,,,RIDING B,Liberal,Green,,Y,,5,4
-,,Frank,,,RIDING B,Liberal,NDP,,Y,,6,1
-,,George,,,RIDING B,Liberal,Green,,,,7,
+,,Alex,,,RIDING A,NDP,LIBERAL,,Y,,1,6
+,,Bob,,,RIDING A,NDP,LIBERAL,,,,2,
+,,Chris,,,RIDING A,LIBERAL,GREEN,,,,3,
+,,Derek,,,RIDING A,GREEN,LIBERAL,,Y,,4,5
+,,Edward,,,RIDING B,LIBERAL,GREEN,,Y,,5,4
+,,Frank,,,RIDING B,LIBERAL,NDP,,Y,,6,1
+,,George,,,RIDING B,LIBERAL,GREEN,,,,7,
 
 4. UPDATE THIS Pairings found in multiple ridings for multiple parties, 
    not all potential paired persons matched
    
 >>> pairvote('''
-... ,,"Alex",,,"Riding A","NDP","Liberal",,,,1,
-... ,,"Bob",,,"Riding A","NDP","Liberal",,,,2,
-... ,,"Chris",,,"Riding A","Liberal","Green",,,,3,
-... ,,"Derek",,,"Riding A","Green","Liberal",,,,4,
-... ,,"Edward",,,"Riding B","Liberal","Green",,,,5,
-... ,,"Frank",,,"Riding B","Liberal","NDP",,,,6,
-... ,,"George",,,"Riding B","Liberal","Green",,,,7,
-... ,,"Henry",,,"Riding B","NDP","Liberal",,,,8,
-... ,,"Igor",,,"Riding B","Green","Liberal",,,,9,
-... ,,"Juan",,,"Riding B","Liberal","Green",,,,10,
-... ,,"Karl",,,"Riding B","Liberal","NDP",,,,11,
-... ,,"Lenny",,,"Riding B","NDP","Green",,,,12,
+... ,,"Alex",,,"Riding A","NDP","LIBERAL",,,,1,
+... ,,"Bob",,,"Riding A","NDP","LIBERAL",,,,2,
+... ,,"Chris",,,"Riding A","LIBERAL","GREEN",,,,3,
+... ,,"Derek",,,"Riding A","GREEN","LIBERAL",,,,4,
+... ,,"Edward",,,"Riding B","LIBERAL","GREEN",,,,5,
+... ,,"Frank",,,"Riding B","LIBERAL","NDP",,,,6,
+... ,,"George",,,"Riding B","LIBERAL","GREEN",,,,7,
+... ,,"Henry",,,"Riding B","NDP","LIBERAL",,,,8,
+... ,,"Igor",,,"Riding B","GREEN","LIBERAL",,,,9,
+... ,,"Juan",,,"Riding B","LIBERAL","GREEN",,,,10,
+... ,,"Karl",,,"Riding B","LIBERAL","NDP",,,,11,
+... ,,"Lenny",,,"Riding B","NDP","GREEN",,,,12,
 ... ''', 'ridingsA.csv')
-,,Alex,,,RIDING A,NDP,Liberal,,Y,,1,6
-,,Bob,,,RIDING A,NDP,Liberal,,Y,,2,11
-,,Chris,,,RIDING A,Liberal,Green,,Y,,3,9
-,,Derek,,,RIDING A,Green,Liberal,,Y,,4,5
-,,Edward,,,RIDING B,Liberal,Green,,Y,,5,4
-,,Frank,,,RIDING B,Liberal,NDP,,Y,,6,1
-,,George,,,RIDING B,Liberal,Green,,,,7,
-,,Henry,,,RIDING B,NDP,Liberal,,,,8,
-,,Igor,,,RIDING B,Green,Liberal,,Y,,9,3
-,,Juan,,,RIDING B,Liberal,Green,,,,10,
-,,Karl,,,RIDING B,Liberal,NDP,,Y,,11,2
-,,Lenny,,,RIDING B,NDP,Green,,,,12,
+,,Alex,,,RIDING A,NDP,LIBERAL,,Y,,1,6
+,,Bob,,,RIDING A,NDP,LIBERAL,,Y,,2,11
+,,Chris,,,RIDING A,LIBERAL,GREEN,,Y,,3,9
+,,Derek,,,RIDING A,GREEN,LIBERAL,,Y,,4,5
+,,Edward,,,RIDING B,LIBERAL,GREEN,,Y,,5,4
+,,Frank,,,RIDING B,LIBERAL,NDP,,Y,,6,1
+,,George,,,RIDING B,LIBERAL,GREEN,,,,7,
+,,Henry,,,RIDING B,NDP,LIBERAL,,,,8,
+,,Igor,,,RIDING B,GREEN,LIBERAL,,Y,,9,3
+,,Juan,,,RIDING B,LIBERAL,GREEN,,,,10,
+,,Karl,,,RIDING B,LIBERAL,NDP,,Y,,11,2
+,,Lenny,,,RIDING B,NDP,GREEN,,,,12,
 
 5. Pairing not made between persons in two swing ridings because
    all pairs made between swing and non-swing ridings
@@ -102,11 +102,11 @@ Scenario:
    Result: no pairing.
 
 >>> pairvote('''
-... ,,"Joe",,,"Riding A","Liberal","Green",,,,1,
-... ,,"Sally",,,"Riding B","Green","Liberal",,,,2,
+... ,,"Joe",,,"Riding A","LIBERAL","GREEN",,,,1,
+... ,,"Sally",,,"Riding B","GREEN","LIBERAL",,,,2,
 ... ''', 'ridingsAB.csv')
-,,Sally,,,RIDING B,Green,Liberal,,,,2,
-,,Joe,,,RIDING A,Liberal,Green,,,,1,
+,,Sally,,,RIDING B,GREEN,LIBERAL,,,,2,
+,,Joe,,,RIDING A,LIBERAL,GREEN,,,,1,
 
 6. Pairing not made because person should vote for preferred party
    in their own riding
@@ -120,10 +120,10 @@ Scenario:
    Result: Alex paired with Frank.  No match for Bob (Frank is already matched)
  
 >>> pairvote('''
-... ,,"Alex",,,"Riding A","NDP","Liberal",,,,1,
-... ,,"Bob",,,"Riding A","NDP","Liberal",,,,2,
-... ,,"Frank",,,"Riding B","Liberal","NDP",,,,3,
+... ,,"Alex",,,"Riding A","NDP","LIBERAL",,,,1,
+... ,,"Bob",,,"Riding A","NDP","LIBERAL",,,,2,
+... ,,"Frank",,,"Riding B","LIBERAL","NDP",,,,3,
 ... ''', 'ridingsA.csv')
-,,Alex,,,RIDING A,NDP,Liberal,,Y,,1,3
-,,Bob,,,RIDING A,NDP,Liberal,,,,2,
-,,Frank,,,RIDING B,Liberal,NDP,,Y,,3,1
+,,Alex,,,RIDING A,NDP,LIBERAL,,Y,,1,3
+,,Bob,,,RIDING A,NDP,LIBERAL,,,,2,
+,,Frank,,,RIDING B,LIBERAL,NDP,,Y,,3,1
