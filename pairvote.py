@@ -17,7 +17,7 @@ class PairingEngine:
         self.empty_will_vote = []
         self.swing_ridings = {}
         self.party_ridings = {}
-        self.parties = ["GREEN", "LIBERAL", "NDP"]
+        self.parties = ["GREEN", "LIBERAL", "NDP", "BLOC"]
     
         self._init_ranked_ridings(ridings_file)
     
