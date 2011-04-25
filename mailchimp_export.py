@@ -52,7 +52,10 @@ for pair in pairs:
     swing = pair[0]
     pairee = pair[1]
 
-    vp = voters[pairee['email']]
-    pairee_email = pairee['email'] if swing['email'] != pairee['email'] else '-'
-    print swing['email'], ',', swing['voting-for'], ',swing,', pairee_email, ',', vp['firstname'], ',', 
-    print vp['lastname'], ',', vp['riding'], ',nonswing,', pairee['voting-for']
+    print swing['email'], ',', swing['voting-for'], ',swing,', 
+    
+    if swing['email'] == pairee['email']:
+        print '-,,,,,'
+    else:
+        vp = voters[pairee['email']]
+        print pairee['email'], ',', vp['firstname'], ',', vp['lastname'], ',', vp['riding'], ',nonswing,', pairee['voting-for']
