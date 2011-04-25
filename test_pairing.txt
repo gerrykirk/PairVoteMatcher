@@ -47,7 +47,7 @@ Scenario:
 >>> pairvote('''
 ... ,,"Alex",,,"Riding A","NDP","LIBERAL",,,,1,
 ... ,,"Bob",,,"Riding A","NDP","LIBERAL",,,,2,
-... ,,"Chris",,,"Riding A","LIBERAL","GREEN",,,,3,
+... ,,"Chris",,,"Riding A","BLOC","GREEN",,,,3,
 ... ,,"Derek",,,"Riding A","GREEN","LIBERAL",,,,4,
 ... ,,"Edward",,,"Riding B","LIBERAL","GREEN",,,,5,
 ... ,,"Frank",,,"Riding B","LIBERAL","NDP",,,,6,
@@ -55,7 +55,7 @@ Scenario:
 ... ''', 'ridingsA.csv')
 ,,Alex,,,RIDING A,NDP,LIBERAL,,Y,,1,6
 ,,Bob,,,RIDING A,NDP,LIBERAL,,,,2,
-,,Chris,,,RIDING A,LIBERAL,GREEN,,,,3,
+,,Chris,,,RIDING A,BLOC,GREEN,,,,3,
 ,,Derek,,,RIDING A,GREEN,LIBERAL,,Y,,4,5
 ,,Edward,,,RIDING B,LIBERAL,GREEN,,Y,,5,4
 ,,Frank,,,RIDING B,LIBERAL,NDP,,Y,,6,1
@@ -94,22 +94,33 @@ Scenario:
 5. Pairing not made between persons in two swing ridings because
    all pairs made between swing and non-swing ridings
 
-   Voter Joe in Riding A prefers Liberal, will vote for NDP
-   Voter Sally in Riding B prefers NDP, will vote for Liberal
+   Voter Joe in Riding A prefers Green, will vote for Liberal
+   Voter Sally in Riding B prefers Liberal, will vote for NDP
    However, Riding A is a Liberal swing riding and Riding B is an NDP swing riding
    (see ridingsAB.csv) so neither is matched.
 
    Result: no pairing.
 
 >>> pairvote('''
-... ,,"Joe",,,"Riding A","LIBERAL","GREEN",,,,1,
-... ,,"Sally",,,"Riding B","GREEN","LIBERAL",,,,2,
+... ,,"Joe",,,"Riding A","GREEN","LIBERAL",,,,1,
+... ,,"Sally",,,"Riding B","LIBERAL","NDP",,,,2,
 ... ''', 'ridingsAB.csv')
-,,Sally,,,RIDING B,GREEN,LIBERAL,,,,2,
-,,Joe,,,RIDING A,LIBERAL,GREEN,,,,1,
+,,Sally,,,RIDING B,LIBERAL,NDP,,,,2,
+,,Joe,,,RIDING A,GREEN,LIBERAL,,,,1,
 
-6. Pairing not made because person should vote for preferred party
-   in their own riding
+6. If a person is in a swing riding and their preferred party is the pick for 
+   for that riding, they should vote for their preferred party.
+
+   Mark these users as paired with themselves.
+
+>>> pairvote('''
+... ,,"Joe",,,"Burnaby-Douglas","LIBERAL","NDP",,,,1,
+... ,,"Sally",,,"Oxford","NDP","LIBERAL",,,,2,
+... ,,"Danica",,,"Burnaby-Douglas","NDP","LIBERAL,GREEN",,,,3,
+... ''')
+,,Joe,,,BURNABY-DOUGLAS,LIBERAL,NDP,,Y,,1,2
+,,Danica,,,BURNABY-DOUGLAS,NDP,"LIBERAL,GREEN",,Y,,3,3
+,,Sally,,,OXFORD,NDP,LIBERAL,,Y,,2,1
 
 7. Pairing for person made only once, cannot be selected again
 

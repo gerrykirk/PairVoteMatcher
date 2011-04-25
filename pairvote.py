@@ -18,7 +18,8 @@ class PairingEngine:
         self.swing_ridings = {}
         self.party_ridings = {}
         self.parties = ["GREEN", "LIBERAL", "NDP", "BLOC"]
-    
+        self.pairs = []
+
         self._init_ranked_ridings(ridings_file)
     
     def _init_ranked_ridings(self, ridings_file):
@@ -66,10 +67,20 @@ class PairingEngine:
         
         return voter
         
+    def pair_voters(self, swing, non_swing, swing_party):
+        self.pairs.append((swing, non_swing))
+        swing['paired'] = 'Y'
+        swing['commit'] = swing_party
+        swing['swing'] = 'Y'
+        swing['pair'] = non_swing['sequential']
+        non_swing['paired']='Y'
+        non_swing['swing']='Y'
+        non_swing['commit'] = swing['preferred']
+        non_swing['pair'] = swing['sequential']
+        
     def pair(self, csv_data=None):
         swing_voters = {}
         non_swing_voters = []
-        pairs = []
         
         # sequential = 0
         # sequentials = {}
@@ -103,6 +114,14 @@ class PairingEngine:
         for riding in swing_voters.keys():
             for voter in swing_voters[riding]:
                 self.check_voter(voter)
+                
+                # Check to see if they already prefer to vote for our party pick
+                # in their swing riding
+                if voter['problem'] != 'Y' and self.party_ridings.has_key(voter['preferred']):
+                    for riding in self.party_ridings[voter['preferred']]:
+                        if riding == voter['riding']:
+                            self.pair_voters(voter, voter, voter['preferred'])
+                            
         for voter in non_swing_voters:
             self.check_voter(voter)
         
@@ -126,22 +145,14 @@ class PairingEngine:
                         # preferred party.
                         if self.candidate_voter(voter, swing_voter['preferred']) and self.candidate_voter(swing_voter, voter['preferred']):
                             # match!
-                            pairs.append((swing_voter, voter))
-                            swing_voter['paired'] = 'Y'
-                            swing_voter['commit'] = party
-                            swing_voter['swing'] = 'Y'
-                            swing_voter['pair'] = voter['sequential']
-                            voter['paired']='Y'
-                            voter['swing']='Y'
-                            voter['commit'] = swing_voter['preferred']
-                            voter['pair'] = swing_voter['sequential']
+                            self.pair_voters(swing_voter, voter, party)
                             break
                             
         # we are done, spit results
         f = open('pairings.csv', 'wb')
         writer = csv.writer(f)
 
-        for pair in pairs:
+        for pair in self.pairs:
             def extractpair(pair):
                 return [pair['name'], pair['email'], pair['riding'], pair['commit'], pair['swing']]
             writer.writerow(extractpair(pair[0]) + extractpair(pair[1]))
