@@ -117,8 +117,9 @@ class PairingEngine:
                     if not self.candidate_voter(swing_voter, party):
                         continue
                                                 
-                    # Now see if we can find a match in a non-swing riding
-                    for voter in non_swing_voters:
+                    # Now see if we can find a match in a non-swing riding who wants to vote
+                    # for the party we're looking at.
+                    for voter in [n for n in non_swing_voters if n['preferred'] == party]:
                         # A valid match is a non-paired voter in a non-swing riding
                         # who is willing to vote for the swing voter's prefered party,
                         # and where the swing_voter is willing to vote for the non-swing's

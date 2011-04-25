@@ -127,3 +127,25 @@ Scenario:
 ,,Alex,,,RIDING A,NDP,LIBERAL,,Y,,1,3
 ,,Bob,,,RIDING A,NDP,LIBERAL,,,,2,
 ,,Frank,,,RIDING B,LIBERAL,NDP,,Y,,3,1
+
+8. False positive
+
+   Janell is in Liberal swing riding Riding A and is willing to vote NDP or Liberal; she refers Green.
+   Dominic is in a Riding B, prefers NDP and is willing to vote Green, Liberal or Bloc.
+
+   The algorithm was falsely matching Janell and Dominic because it was:
+       1) Looking for a voter in the swing riding willing to vote Liberal
+       2) Looking for a non-swing voter who is willing to vote for Janell's preferred party and
+          for whom Janell is willing to vote for her preferred party.
+       3) The problem is that the algorithm wasn't checking to make sure the swing riding
+          was one for the non-swing voter's preferred party.  Ie., it had Janell voting Liberal in 
+          Riding A and Dominic voting Green for Janell in Riding B, but NDP is Dominic's preferred.
+
+   Result: no match found.
+
+>>> pairvote('''
+... ,,"Janell",,,"Riding A","GREEN","LIBERAL,NDP",,,,1,
+... ,,"Dominic",,,"Riding B","NDP","GREEN,LIBERAL,BLOC",,,,2,
+... ''', 'ridingsA.csv')
+,,Janell,,,RIDING A,GREEN,"LIBERAL,NDP",,,,1,
+,,Dominic,,,RIDING B,NDP,"GREEN,LIBERAL,BLOC",,,,2,
