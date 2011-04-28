@@ -21,7 +21,7 @@ def parse_row(row, count):
     voter = { 'riding': riding, 'preferred': row[6], 'willing': row[10], 'paired': '',
                   'commit':'','firstname' : row[1], 'lastname' : row[2],'email':row[0],'form':'','date':'',
                   'sequential':count, 'pair':'','telephone':'','postal':5,'problem':'',
-                  'swinger' : swinger}
+                  'swinger' : swinger, 'facebook' : row[3], 'twitter' : row[4]}
 
     return voter
     
@@ -46,16 +46,24 @@ for row in paired_voters_csv:
     non_swinger = { 'riding' : row[7], 'email' : row[6], 'voting-for' : row[8]}
     pairs.append( (swinger, non_swinger) )
 
-print "Participant Email, Participant Party Vote, Riding Swing Status, Pairee Email, Pairee First Name, Pairee Lastname, Pairing Riding, Pairee Riding Swing Status, Pairee Party Vote"
+print "Participant Email, Participant Party Vote, Riding Swing Status, Pairee Email, Pairee First Name, Pairee Lastname, Pairing Riding, Pairee Riding Swing Status, Pairee Party Vote, Pairee Facebook, Pairee Twitter"
 
 for pair in pairs:
     swing = pair[0]
-    pairee = pair[1]
+    nonswing = pair[1]
 
     print swing['email'], ',', swing['voting-for'], ',swing,', 
     
-    if swing['email'] == pairee['email']:
-        print '-,,,,,'
+    if swing['email'] == nonswing['email']:
+        print '-,,,,,,,'
+        pass
     else:
-        vp = voters[pairee['email']]
-        print pairee['email'], ',', vp['firstname'], ',', vp['lastname'], ',', vp['riding'], ',nonswing,', pairee['voting-for']
+        vns = voters[nonswing['email']]
+        print nonswing['email'], ',', vns['firstname'], ',', vns['lastname'], ',', vns['riding'], ',nonswing,', nonswing['voting-for'],
+        print ',', vns['facebook'], ',', vns['twitter']
+        
+        vs = voters[swing['email']]
+        print nonswing['email'], ',', nonswing['voting-for'], ',nonswing,',
+        print swing['email'], ',', vs['firstname'], ',', vs['lastname'], ',', vs['riding'], ',swing,', swing['voting-for'],
+        print ',', vs['facebook'], ',', vs['twitter']
+        
