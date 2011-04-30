@@ -1,3 +1,5 @@
+Description: Each test consults a list of swing ridings. If none provided, defaults to using swingridings.csv
+
 Test cases
 "Form","Date","Name","Email","Postal Code","Ridings","Preferred","Will Vote For","Phone","Paired?","Data Problem?","Sequential","Pair"
 
@@ -7,7 +9,7 @@ Test Setup
 
 Scenario:
 
-1. One voter in swing riding is matched to another in a non-swing riding
+1. One voter in swing riding is matched to another riding
 
    Voter Joe in Burnaby-Douglas prefers Liberal, will vote for NDP
    Voter Sally in Oxford prefers NDP, will vote for Liberal
@@ -61,35 +63,35 @@ Scenario:
 ,,Frank,,,RIDING B,LIBERAL,NDP,,Y,,6,1
 ,,George,,,RIDING B,LIBERAL,GREEN,,,,7,
 
-4. UPDATE THIS Pairings found in multiple ridings for multiple parties, 
+4. Pairings found in multiple ridings for multiple parties, 
    not all potential paired persons matched
    
 >>> pairvote('''
-... ,,"Alex",,,"Riding A","NDP","LIBERAL",,,,1,
-... ,,"Bob",,,"Riding A","NDP","LIBERAL",,,,2,
-... ,,"Chris",,,"Riding B","LIBERAL","GREEN",,,,3,
-... ,,"Derek",,,"Riding C","GREEN","LIBERAL",,,,4,
-... ,,"Edward",,,"Riding B","LIBERAL","GREEN",,,,5,
-... ,,"Frank",,,"Riding C","LIBERAL","NDP",,,,6,
-... ,,"George",,,"Riding B","LIBERAL","GREEN",,,,7,
-... ,,"Henry",,,"Riding B","NDP","LIBERAL",,,,8,
-... ,,"Igor",,,"Riding C","GREEN","LIBERAL",,,,9,
-... ,,"Juan",,,"Riding B","LIBERAL","GREEN",,,,10,
-... ,,"Karl",,,"Riding C","LIBERAL","NDP",,,,11,
-... ,,"Lenny",,,"Riding B","NDP","GREEN",,,,12,
-... ''', 'ridings4.csv')
-,,Chris,,,RIDING B,LIBERAL,GREEN,,Y,,3,4
-,,Edward,,,RIDING B,LIBERAL,GREEN,,Y,,5,9
-,,George,,,RIDING B,LIBERAL,GREEN,,,,7,
-,,Henry,,,RIDING B,NDP,LIBERAL,,,,8,
-,,Juan,,,RIDING B,LIBERAL,GREEN,,,,10,
-,,Lenny,,,RIDING B,NDP,GREEN,,,,12,
-,,Alex,,,RIDING A,NDP,LIBERAL,,Y,,1,6
-,,Bob,,,RIDING A,NDP,LIBERAL,,Y,,2,11
-,,Derek,,,RIDING C,GREEN,LIBERAL,,Y,,4,3
-,,Frank,,,RIDING C,LIBERAL,NDP,,Y,,6,1
-,,Igor,,,RIDING C,GREEN,LIBERAL,,Y,,9,5
-,,Karl,,,RIDING C,LIBERAL,NDP,,Y,,11,2
+... ,,"Alex",,,"North Vancouver","NDP","LIBERAL",,,,1,
+... ,,"Bob",,,"North Vancouver","NDP","LIBERAL",,,,2,
+... ,,"Chris",,,"Saint Boniface","LIBERAL","GREEN",,,,3,
+... ,,"Derek",,,"Saint Boniface","GREEN","LIBERAL",,,,4,
+... ,,"Edward",,,"Saint Boniface","LIBERAL","GREEN",,,,5,
+... ,,"Frank",,,"Saint Boniface","LIBERAL","NDP",,,,6,
+... ,,"George",,,"Saint Boniface","LIBERAL","GREEN",,,,7,
+... ,,"Henry",,,"Saint Boniface","NDP","LIBERAL",,,,8,
+... ,,"Igor",,,"Saint Boniface","GREEN","LIBERAL",,,,9,
+... ,,"Juan",,,"Saint Boniface","LIBERAL","GREEN",,,,10,
+... ,,"Karl",,,"Saint Boniface","LIBERAL","NDP",,,,11,
+... ,,"Lenny",,,"Saint Boniface","NDP","GREEN",,,,12,
+... ''')
+,,Chris,,,Saint Boniface,LIBERAL,GREEN,,Y,,3,4
+,,Edward,,,Saint Boniface,LIBERAL,GREEN,,Y,,5,9
+,,George,,,Saint Boniface,LIBERAL,GREEN,,,,7,
+,,Henry,,,Saint Boniface,NDP,LIBERAL,,,,8,
+,,Juan,,,Saint Boniface,LIBERAL,GREEN,,,,10,
+,,Lenny,,,Saint Boniface,NDP,GREEN,,,,12,
+,,Alex,,,North Vancouver,NDP,LIBERAL,,Y,,1,6
+,,Bob,,,North Vancouver,NDP,LIBERAL,,Y,,2,11
+,,Derek,,,Saint Boniface,GREEN,LIBERAL,,Y,,4,3
+,,Frank,,,Saint Boniface,LIBERAL,NDP,,Y,,6,1
+,,Igor,,,Saint Boniface,GREEN,LIBERAL,,Y,,9,5
+,,Karl,,,Saint Boniface,LIBERAL,NDP,,Y,,11,2
 
 5. Pairing not made between persons in two swing ridings because
    all pairs made between swing and non-swing ridings
