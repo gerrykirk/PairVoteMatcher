@@ -19,7 +19,7 @@ class PairingEngine:
         self.party_ridings = {}
         self.parties = ["GREEN", "LIBERAL", "NDP", "BLOC"]
         self.pairs = []
-
+        
         self._init_ranked_ridings(ridings_file)
     
     def _init_ranked_ridings(self, ridings_file):
@@ -46,9 +46,6 @@ class PairingEngine:
                 self.empty_will_vote.append(voter)
                 voter['problem'] = 'Y'
                        
-    def candidate_voter(self, voter, party):
-        return party in voter['willing'] and voter['paired'] == '' and voter['problem'] != 'Y'
-    
     def parse_test_row(self, row, count):
         log(row)
         
@@ -67,24 +64,30 @@ class PairingEngine:
         
         return voter
         
-    def pair_voters(self, swing, non_swing, swing_party):
-        self.pairs.append((swing, non_swing))
+    def pair_voters(self, swing, pairee, swing_party):
+        self.pairs.append((swing, pairee))
         swing['paired'] = 'Y'
         swing['commit'] = swing_party
-        swing['swing'] = 'Y'
-        swing['pair'] = non_swing['sequential']
-        non_swing['paired']='Y'
-        non_swing['swing']='Y'
-        non_swing['commit'] = swing['preferred']
-        non_swing['pair'] = swing['sequential']
-        
-    def pair(self, csv_data=None):
-        swing_voters = {}
-        non_swing_voters = []
-        
-        # sequential = 0
-        # sequentials = {}
+        swing['pair'] = pairee['sequential']
+        pairee['paired']='Y'
+        pairee['commit'] = swing['preferred']
+        pairee['pair'] = swing['sequential']
 
+    def find_match(self, party, riding, swinger, candidates):
+        for candidate in candidates:
+            if candidate['riding'] == riding: continue
+            if candidate['preferred'] != party: continue              
+            if candidate['paired'] == 'Y' or candidate['problem'] == 'Y': continue      
+            if swinger['preferred'] in candidate['willing']: 
+                self.pair_voters(swinger, candidate, party)                            
+                return True
+
+        return False
+         
+    def pair(self, csv_data=None):
+        non_swing_voters = []
+        swing_voters = []
+        
         # create list of voter dictionaries for clear access to column names
         if csv_data:
             voters_csv = csv.reader(csv_data.split("\n"))
@@ -102,51 +105,39 @@ class PairingEngine:
             
             count += 1
             voter = parse_f(row, count)
-
+            
             if self.swing_ridings.has_key(voter['riding']):
-                if not swing_voters.has_key(voter['riding']):
-                    swing_voters[voter['riding']] = []
-                swing_voters[voter['riding']].append(voter)
+                voter['swing'] = 'Y'
+                swing_voters.append(voter)
             else:
-                # Possibly we could divide them up by who they're willing to vote for?
+                voter['swing'] = 'N'
                 non_swing_voters.append(voter)
+        
+        for voter in swing_voters:
+            self.check_voter(voter)
                 
-        for riding in swing_voters.keys():
-            for voter in swing_voters[riding]:
-                self.check_voter(voter)
-                
-                # Check to see if they already prefer to vote for our party pick
-                # in their swing riding
-                if voter['problem'] != 'Y' and self.party_ridings.has_key(voter['preferred']):
-                    for riding in self.party_ridings[voter['preferred']]:
-                        if riding == voter['riding']:
-                            self.pair_voters(voter, voter, voter['preferred'])
-                            
+            # Check to see if they already prefer to vote for our party pick
+            # in their swing riding
+            if voter['problem'] != 'Y' and self.party_ridings.has_key(voter['preferred']):
+                for riding in self.party_ridings[voter['preferred']]:
+                    if riding == voter['riding']:
+                        self.pair_voters(voter, voter, voter['preferred'])
+                                                       
         for voter in non_swing_voters:
             self.check_voter(voter)
-        
+                    
         # start pairing process
         for party in self.parties:
-            for riding in self.party_ridings[party]:
-                if not swing_voters.has_key(riding): continue
-                
-                # We're looking for an unmatched voter in a swing-riding willing to vote
-                # for the current party.
-                for swing_voter in swing_voters[riding]:
-                    if not self.candidate_voter(swing_voter, party):
-                        continue
-                                                
-                    # Now see if we can find a match in a non-swing riding who wants to vote
-                    # for the party we're looking at.
-                    for voter in [n for n in non_swing_voters if n['preferred'] == party]:
-                        # A valid match is a non-paired voter in a non-swing riding
-                        # who is willing to vote for the swing voter's prefered party,
-                        # and where the swing_voter is willing to vote for the non-swing's
-                        # preferred party.
-                        if self.candidate_voter(voter, swing_voter['preferred']) and self.candidate_voter(swing_voter, voter['preferred']):
-                            # match!
-                            self.pair_voters(swing_voter, voter, party)
-                            break
+            for riding in self.party_ridings[party]:  
+                matched = False   
+                # Loop through the swing riding for current party.  If they are unpaired, try to find them a match.             
+                for sv in [v for v in swing_voters if v['riding'] == riding and v['paired'] != 'Y' and v['problem'] != 'Y']:
+                    if not party in sv['willing']: continue
+                    # Look through the rest of the swing voters and see if we can find a match                    
+                    matched = self.find_match(party, riding, sv, swing_voters)
+                    # if we couldn't find a match, check the non-swing-voters
+                    if not matched:
+                        self.find_match(party, riding, sv, non_swing_voters)
                             
         # we are done, spit results
         f = open('pairings.csv', 'wb')
@@ -159,11 +150,7 @@ class PairingEngine:
         f.close()
         
         updated_voters = []
-        for riding in swing_voters.keys():
-            for v in swing_voters[riding]:
-                updated_voters.append([v['form'], v['date'], v['name'], v['email'], v['postal'], v['riding'], v['preferred'],
-                ','.join(v['willing']), v['telephone'], v['paired'], v['problem'], v['sequential'], v['pair']])
-        for v in non_swing_voters:
+        for v in swing_voters + non_swing_voters:
              updated_voters.append([v['form'], v['date'], v['name'], v['email'], v['postal'], v['riding'], v['preferred'],
                 ','.join(v['willing']), v['telephone'], v['paired'], v['problem'], v['sequential'], v['pair']])
                 
